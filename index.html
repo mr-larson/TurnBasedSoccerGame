@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Jeu de Football au Tour par Tour</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+<div class="content">
+    <h1>Jeu de Football au Tour par Tour</h1>
+    <div id="actionsFootball">
+        <button onclick="effectuerActionFootball('dribbler')">Dribbler</button>
+        <button onclick="effectuerActionFootball('passer')">Passer</button>
+        <button onclick="effectuerActionFootball('tirer')">Tirer</button>
+    </div>
+    <div id="resultatFootball"></div>
+
+    <div class="field" id="field">
+        <div class="goal" id="goal1"></div>
+        <div class="goal" id="goal2"></div>
+        <div class="balle" id="balle" data-player="internalMidfielder"></div>
+
+        <div class="internalTeam" id="internalTeam">
+            <!--goalkeeper-->
+            <div class="player" id="internalGoalkeeper">1</div>
+            <!--Defender-->
+            <div class="player" id="internalDefender">2</div>
+            <!--Midfielder-->
+            <div class="player" id="internalMidfielder">3</div>
+            <!--Forward-->
+            <div class="player" id="internalForward">4</div>
+        </div>
+        <div class="externalTeam" id="externalTeam">
+            <!--goalkeeper-->
+            <div class="player" id="externalGoalkeeper">1</div>
+            <!--Defender-->
+            <div class="player" id="externalDefender">2</div>
+            <!--Midfielder-->
+            <div class="player" id="externalMidfielder">3</div>
+            <!--Forward-->
+            <div class="player" id="externalForward">4</div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    function initialiserJeu() {
+        document.getElementById('balle').style.left = '50%';
+        document.getElementById('balle').style.top = '50%';
+    }
+
+    function lancerDeFootball() {
+        return Math.floor(Math.random() * 10) + 1;
+    }
+
+    function effectuerActionFootball(action) {
+        var resultatDe = lancerDeFootball();
+        var balle = document.getElementById('balle');
+        var message;
+
+        // Liste des players dans l'ordre pour les passes
+        var ordreInternal = ['internalGoalkeeper', 'internalDefender', 'internalMidfielder', 'internalForward'];
+        var ordreExternal = ['externalGoalkeeper', 'externalDefender', 'externalMidfielder', 'externalForward'];
+
+        // Déterminez le player Current avec la balle
+        var playerCurrent = ordreInternal.includes(balle.dataset.player) ? 'internal' : 'external';
+        var indexplayer = (playerCurrent === 'internal' ? ordreInternal : ordreExternal).indexOf(balle.dataset.player);
+
+        if (action === 'passer') {
+            if (resultatDe > 5) { // Passe réussie
+                if (indexplayer < 3) {
+                    indexplayer = indexplayer + 1; // Avance au prochain player
+                } else {
+                    console.log('Le dernier player a la balle');
+                }
+                message = 'Passe réussie! (' + resultatDe + ')';
+            } else { // Passe échouée
+                switch (balle.dataset.player) {
+                    case 'internalGoalkeeper':
+                    case 'internalDefender':
+                        playerCurrent = 'external';
+                        indexplayer = ordreExternal.indexOf('externalForward');
+                        break;
+                    case 'internalMidfielder':
+                        playerCurrent = 'external';
+                        indexplayer = ordreExternal.indexOf('externalMidfielder');
+                        break;
+                    case 'internalForward':
+                        playerCurrent = 'external';
+                        indexplayer = ordreExternal.indexOf('externalDefender');
+                        break;
+                    case 'externalGoalkeeper':
+                    case 'externalDefender':
+                        playerCurrent = 'internal';
+                        indexplayer = ordreInternal.indexOf('internalForward');
+                        break;
+                    case 'externalMidfielder':
+                        playerCurrent = 'internal';
+                        indexplayer = ordreInternal.indexOf('internalMidfielder');
+                        break;
+                    case 'externalForward':
+                        playerCurrent = 'internal';
+                        indexplayer = ordreInternal.indexOf('internalDefender');
+                        break;
+                }
+                message = 'Passe échouée! (' + resultatDe + ')';
+            }
+
+            // Mettre à jour la position de la balle
+            var playerNext = (playerCurrent === 'internal' ? ordreInternal : ordreExternal)[indexplayer];
+            balle.dataset.player = playerNext;
+            var playerDOM = document.getElementById(playerNext);
+
+            // Calculer la position basée sur la taille du terrain
+            var fieldRect = document.getElementById('field').getBoundingClientRect();
+            var playerRect = playerDOM.getBoundingClientRect();
+
+            console.log('player avec la balle:', playerNext);
+
+            balle.style.left = (playerRect.left - fieldRect.left) + 'px';
+            balle.style.top = (playerRect.top - fieldRect.top) + 'px';
+        }
+
+        document.getElementById('resultatFootball').innerHTML = message;
+    }
+
+
+    window.onload = initialiserJeu;
+
+</script>
+
+</body>
+</html>
+

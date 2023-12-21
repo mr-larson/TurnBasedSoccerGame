@@ -1,0 +1,98 @@
+.content {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#actionsFootball {
+    height: 8vh;
+    width: 20vw;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+#actionsFootball button {
+    background-color: #0d78dc;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+#actionsFootball button:hover {
+    background-color: #083f8f;
+}
+
+#resultatFootball {
+    font-size: 18px;
+    color: #333;
+}
+
+.field {
+    width: 80vw;
+    height: 80vh;
+    background-color: rgba(45, 150, 45, 0.88);
+    border: 2px solid rgba(171, 171, 171, 0.82);
+    border-radius: 10px;
+    position: relative;
+}
+
+.goal{
+    width: 1vw;
+    height: 20vh;
+    background-color: rgba(0, 0, 0, 0.51);
+    position: absolute;
+    transform: translateY(-50%);
+}
+#goal1 {
+    left: 0;
+    top: 50%;
+}
+#goal2 {
+    right: 0;
+    top: 50%;
+}
+
+.balle {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: rgba(252, 252, 252, 0.76);
+    position: absolute;
+}
+
+.player {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+}
+
+.internalTeam .player {
+    border: 2px solid blue;
+    background-color: rgba(0, 0, 255, 0.51);
+}
+
+.externalTeam .player {
+    border: 2px solid red;
+    background-color: rgba(255, 0, 0, 0.51);
+}
+
+/* positionnement de base */
+#internalGoalkeeper { left: 0; top: 50%; }
+#internalDefender { left: 10vw; top: 50%; }
+#internalMidfielder { left: 35vw; top: 50%; }
+#internalForward { left: 60vw; top: 50%; }
+
+#externalGoalkeeper { right: 0; top: 50%; }
+#externalDefender { right: 10vw; top: 50%; }
+#externalMidfielder { right: 35vw; top: 50%; }
+#externalForward { right: 60vw; top: 50%; }
