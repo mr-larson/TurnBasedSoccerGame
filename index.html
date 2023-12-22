@@ -10,7 +10,7 @@
 <div class="content">
     <h1>Jeu de Football au Tour par Tour</h1>
     <div id="actionsFootball">
-        <button onclick="effectuerActionFootball('dribbler')">Dribbler</button>
+        <!--<button onclick="effectuerActionFootball('dribbler')">Dribbler</button>-->
         <button onclick="effectuerActionFootball('passer')">Passer</button>
         <button onclick="effectuerActionFootball('tirer')">Tirer</button>
     </div>
@@ -55,18 +55,37 @@
         return Math.floor(Math.random() * 10) + 1;
     }
 
-    function effectuerActionFootball(action) {
-        var resultatDe = lancerDeFootball();
-        var balle = document.getElementById('balle');
-        var message;
-
-        // Liste des players dans l'ordre pour les passes
+    function getCurrentPlayer(balle) {
         var ordreInternal = ['internalGoalkeeper', 'internalDefender', 'internalMidfielder', 'internalForward'];
         var ordreExternal = ['externalGoalkeeper', 'externalDefender', 'externalMidfielder', 'externalForward'];
 
-        // Déterminez le player Current avec la balle
         var playerCurrent = ordreInternal.includes(balle.dataset.player) ? 'internal' : 'external';
         var indexplayer = (playerCurrent === 'internal' ? ordreInternal : ordreExternal).indexOf(balle.dataset.player);
+
+        return { playerCurrent, indexplayer };
+    }
+
+    function updateBallPosition(player) {
+        var playerDOM = document.getElementById(player);
+        var fieldRect = document.getElementById('field').getBoundingClientRect();
+        var playerRect = playerDOM.getBoundingClientRect();
+        var balle = document.getElementById('balle');
+
+        balle.style.left = (playerRect.left - fieldRect.left) + 'px';
+        balle.style.top = (playerRect.top - fieldRect.top) + 'px';
+
+        balle.dataset.player = player;
+
+        console.log('player avec la balle:', player);
+    }
+
+    function effectuerActionFootball(action) {
+        var resultatDe = lancerDeFootball();
+        var balle = document.getElementById('balle');
+        var { playerCurrent, indexplayer } = getCurrentPlayer(balle);
+        var ordreInternal = ['internalGoalkeeper', 'internalDefender', 'internalMidfielder', 'internalForward'];
+        var ordreExternal = ['externalGoalkeeper', 'externalDefender', 'externalMidfielder', 'externalForward'];
+        var message;
 
         if (action === 'passer') {
             if (resultatDe > 5) { // Passe réussie
@@ -109,18 +128,58 @@
             }
 
             // Mettre à jour la position de la balle
-            var playerNext = (playerCurrent === 'internal' ? ordreInternal : ordreExternal)[indexplayer];
-            balle.dataset.player = playerNext;
-            var playerDOM = document.getElementById(playerNext);
+            updateBallPosition((playerCurrent === 'internal' ? ordreInternal : ordreExternal)[indexplayer]);
+        }
+        if (action === 'tirer') {
+            var seuilReussite;
+            switch (balle.dataset.player) {
+                case 'internalForward':
+                    seuilReussite = 5;
+                    break;
+                case 'internalMidfielder':
+                    seuilReussite = 7;
+                    break;
+                case 'internalDefender':
+                    seuilReussite = 8;
+                    break;
+                case 'externalForward':
+                seuilReussite = 5;
+                    break;
+                case 'externalMidfielder':
+                    seuilReussite = 7;
+                    break;
+                case 'externalDefender':
+                    seuilReussite = 8;
+                    break;
+                default:
+                    seuilReussite = 10;
+            }
 
-            // Calculer la position basée sur la taille du terrain
-            var fieldRect = document.getElementById('field').getBoundingClientRect();
-            var playerRect = playerDOM.getBoundingClientRect();
+            if (resultatDe > seuilReussite) {
+                // Logique pour un tir réussi
+                message = 'Tir réussi! (' + resultatDe + ')';
+                if (playerCurrent === 'internal') {
+                    balle.style.left = '80vw';
+                } else {
+                    balle.style.left = '-1vw';
+                }
+                balle.style.top = '50%';
 
-            console.log('player avec la balle:', playerNext);
+            } else {
+                // Logique pour un tir échoué
+                message = 'Tir raté! (' + resultatDe + ')';
 
-            balle.style.left = (playerRect.left - fieldRect.left) + 'px';
-            balle.style.top = (playerRect.top - fieldRect.top) + 'px';
+                if (playerCurrent === 'internal') {
+                    // Si l'équipe interne échoue, le gardien externe récupère la balle
+                    balle.dataset.player = 'externalGoalkeeper';
+                } else {
+                    // Si l'équipe externe échoue, le gardien interne récupère la balle
+                    balle.dataset.player = 'internalGoalkeeper';
+                }
+
+                // Mettre à jour la position de la balle
+                updateBallPosition(balle.dataset.player);
+            }
         }
 
         document.getElementById('resultatFootball').innerHTML = message;
