@@ -204,7 +204,9 @@
                 scoreExternal++;
             }
             updateScore();
-            initialiserJeu(); // Réinitialise la position de la balle
+            setTimeout(function() {
+                initialiserJeu(); // Réinitialise la position de la balle
+            }, 2000);
         }
     }
 
