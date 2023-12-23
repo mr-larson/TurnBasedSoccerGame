@@ -6,15 +6,15 @@
     align-items: center;
 }
 .header {
-    height: 8vh;
-    width: 40vw;
+    height: 12vh;
+    width: 80vw;
     display: flex;
     justify-content: space-around;
     align-items: center;
 }
 
 .info {
-    height: 8vh;
+    height: 10vh;
     width: 20vw;
     display: flex;
     justify-content: space-around;
@@ -34,9 +34,29 @@
     background-color: #083f8f;
 }
 
-#resultatFootball {
+.scoreBoard {
+    background: #333333;
     font-size: 18px;
-    color: #333;
+    color: #ffffff;
+    border: 1px solid #ffffff;
+    border-radius: 15px;
+    height: 10vh;
+    width: 20vw;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.score-changed {
+    animation: scoreChangeAnimation 1.5s ease;
+}
+
+@keyframes scoreChangeAnimation {
+    0% { transform: scale(1); color: #63f13c; }
+    25% { transform: scale(1); color: red; }
+    50% { transform: scale(1); color: #63f13c; }
+    75% { transform: scale(1); color: red; }
+    100% { transform: scale(1); color: #dcc04f; }
 }
 
 .field {

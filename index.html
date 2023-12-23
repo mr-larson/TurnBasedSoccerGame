@@ -8,12 +8,12 @@
 </head>
 <body>
 <div class="content">
-    <h1>Jeu de Football au Tour par Tour</h1>
     <div class="header">
-        <div id="scoreBoard" class="info">
+        <div id="scoreBoard" class="scoreBoard">
             <div>Score Internal: <span id="scoreInternal">0</span></div>
             <div>Score External: <span id="scoreExternal">0</span></div>
         </div>
+        <h2>Jeu de Football au Tour par Tour</h2>
         <div id="actionsFootball" class="info">
             <!--<button onclick="effectuerActionFootball('dribbler')">Dribbler</button>-->
             <button onclick="effectuerActionFootball('passer')">Passer</button>
@@ -87,10 +87,20 @@
 
     var scoreInternal = 0;
     var scoreExternal = 0;
+
     function updateScore() {
         document.getElementById('scoreInternal').textContent = scoreInternal;
         document.getElementById('scoreExternal').textContent = scoreExternal;
+
+        var scoreElements = [document.getElementById('scoreInternal'), document.getElementById('scoreExternal')];
+        scoreElements.forEach(function(element) {
+            element.classList.add('score-changed');
+            setTimeout(function() {
+                element.classList.remove('score-changed');
+            }, 5000); // Durée de l'animation
+        });
     }
+
 
     function effectuerActionFootball(action) {
         var resultatDe = lancerDeFootball();
@@ -205,7 +215,7 @@
             }
             updateScore();
             setTimeout(function() {
-                initialiserJeu(); // Réinitialise la position de la balle
+                initialiserJeu(); // Réinitialiser le jeu
             }, 2000);
         }
     }
