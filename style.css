@@ -1,19 +1,33 @@
 .content {
-    width: 100vw;
-    height: 100vh;
+    height: 95vh;
     display: flex;
     flex-direction: column;
     align-items: center;
 }
+
 .header {
     height: 12vh;
-    width: 80vw;
+    width: 88vw;
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: center;
 }
 
-.info {
+.commentary {
+    width: 27vw;
+    height: 10vh;
+    background-color: rgb(213, 213, 213);
+    border: 2px solid #c9c9c9;
+    border-radius: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 18px;
+    color: #1d2944;
+    text-align: center;
+}
+
+.header .actions {
     height: 10vh;
     width: 20vw;
     display: flex;
@@ -21,7 +35,7 @@
     align-items: center;
 }
 
-#actionsFootball button {
+.header .actions button {
     background-color: #0d78dc;
     color: white;
     padding: 10px 15px;
@@ -30,24 +44,24 @@
     border-radius: 5px;
 }
 
-#actionsFootball button:hover {
+.header .actions button:hover {
     background-color: #083f8f;
 }
 
-.scoreBoard {
-    background: #333333;
-    font-size: 18px;
-    color: #ffffff;
-    border: 1px solid #ffffff;
-    border-radius: 15px;
+.header .scoreBoard {
     height: 10vh;
-    width: 20vw;
+    width: 27vw;
     display: flex;
     justify-content: space-around;
     align-items: center;
+    background: #333333;
+    font-size: 18px;
+    color: #ffffff;
+    border: 2px solid #c9c9c9;
+    border-radius: 15px;
 }
 
-.score-changed {
+.header .score-changed {
     animation: scoreChangeAnimation 1.5s ease;
 }
 
@@ -68,23 +82,23 @@
     position: relative;
 }
 
-.goal{
+.field .goal{
     width: 1vw;
     height: 20vh;
     background-color: rgba(0, 0, 0, 0.51);
     position: absolute;
     transform: translateY(-50%);
 }
-#goal1 {
+.field #goal1 {
     left: -1vw;
     top: 50%;
 }
-#goal2 {
+.field #goal2 {
     right: -1vw;
     top: 50%;
 }
 
-.balle {
+.field .balle {
     width: 20px;
     height: 20px;
     border-radius: 50%;
@@ -93,7 +107,7 @@
     transition: left 0.5s, top 0.5s;
 }
 
-.player {
+.field .player {
     width: 30px;
     height: 30px;
     border-radius: 50%;
@@ -104,12 +118,12 @@
     color: white;
 }
 
-.internalTeam .player {
+.field .internalTeam .player {
     border: 2px solid blue;
     background-color: rgba(0, 0, 255, 0.51);
 }
 
-.externalTeam .player {
+.field .externalTeam .player {
     border: 2px solid red;
     background-color: rgba(255, 0, 0, 0.51);
 }

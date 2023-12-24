@@ -8,22 +8,24 @@
 </head>
 <body>
 <div class="content">
+    <h2>Jeu de Football au Tour par Tour</h2>
     <div class="header">
-        <div id="scoreBoard" class="scoreBoard">
-            <div>Score Internal: <span id="scoreInternal">0</span></div>
-            <div>Score External: <span id="scoreExternal">0</span></div>
-        </div>
-        <div id="tourCounter" class="tourCounter">
-            Tours : <span id="currentTour">00</span>/20
-        </div>
-        <h2>Jeu de Football au Tour par Tour</h2>
-        <div id="actionsFootball" class="info">
+        <div id="commentary" class="commentary"></div>
+
+        <div id="actionsFootball" class="actions">
             <!--<button onclick="effectuerActionFootball('dribbler')">Dribbler</button>-->
             <button onclick="effectuerActionFootball('passer')">Passer</button>
             <button onclick="effectuerActionFootball('tirer')">Tirer</button>
         </div>
+
+        <div id="scoreBoard" class="scoreBoard">
+            <div>Internal: <span id="scoreInternal">0</span></div>
+            <div>External: <span id="scoreExternal">0</span></div>
+            <div id="tourCounter" class="tourCounter">
+                Tours : <span id="currentTour">00</span>/20
+            </div>
+        </div>
     </div>
-    <div id="resultatFootball"></div>
 
     <div class="field" id="field">
         <div class="goal" id="goal1"></div>
@@ -55,10 +57,24 @@
 
 <script>
     var totalActions = 0;
+    var message;
 
     function initialiserJeu() {
         document.getElementById('balle').style.left = '50%';
         document.getElementById('balle').style.top = '50%';
+        if (totalActions === 0) {
+            message = 'Le match commence! <br>' + scoreInternal + ' - ' + scoreExternal;
+        } else {
+            message = 'Le match continue! <br> ' + scoreInternal + ' - ' + scoreExternal;
+        }
+
+        if (totalActions === 0) {
+            document.getElementById('balle').dataset.player = 'internalMidfielder';
+        } else {
+            document.getElementById('balle').dataset.player = 'externalMidfielder';
+        }
+        document.getElementById('commentary').innerHTML = message;
+
     }
 
     function lancerDeFootball() {
@@ -111,7 +127,6 @@
         var { playerCurrent, indexplayer } = getCurrentPlayer(balle);
         var ordreInternal = ['internalGoalkeeper', 'internalDefender', 'internalMidfielder', 'internalForward'];
         var ordreExternal = ['externalGoalkeeper', 'externalDefender', 'externalMidfielder', 'externalForward'];
-        var message;
 
         totalActions++;
         document.getElementById('currentTour').textContent = totalActions.toString().padStart(2, '0');
@@ -125,7 +140,7 @@
             } else {
                 message = 'Le match est terminé! ' + (scoreInternal > scoreExternal ? 'L\'équipe interne a gagné!' : 'L\'équipe externe a gagné!') + ' Score interne: ' + scoreInternal + ', score externe: ' + scoreExternal;
             }
-            document.getElementById('resultatFootball').innerHTML = message;
+            document.getElementById('commentary').innerHTML = message;
             alert(message)
             return; // Arrêtez la fonction ici si le match est terminé
         }
@@ -137,7 +152,9 @@
                 } else {
                     console.log('Le dernier player a la balle');
                 }
-                message = 'Passe réussie! (' + resultatDe + ')';
+
+                message = `Quelle belle passe de ${balle.dataset.player}! <br> Le dé montre un ${resultatDe}.`;
+
             } else { // Passe échouée
                 switch (balle.dataset.player) {
                     case 'internalGoalkeeper':
@@ -167,7 +184,7 @@
                         indexplayer = ordreInternal.indexOf('internalDefender');
                         break;
                 }
-                message = 'Passe échouée! (' + resultatDe + ')';
+                message = `Oh non, la passe de ${balle.dataset.player} échoue! <br> Le dé montre un ${resultatDe}.`;
             }
 
             // Mettre à jour la position de la balle
@@ -200,7 +217,7 @@
 
             if (resultatDe > seuilReussite) {
                 // Logique pour un tir réussi
-                message = 'Tir réussi! (' + resultatDe + ')';
+                message = `Incroyable tir de ${balle.dataset.player}! <br> Le dé montre un ${resultatDe}.`;
                 if (playerCurrent === 'internal') {
                     balle.style.left = '80vw';
                 } else {
@@ -210,7 +227,8 @@
 
             } else {
                 // Logique pour un tir échoué
-                message = 'Tir raté! (' + resultatDe + ')';
+                message = `Dommage, le tir de ${balle.dataset.player} n'est pas assez bon. <br> Le dé montre un ${resultatDe}.`;
+
 
                 if (playerCurrent === 'internal') {
                     // Si l'équipe interne échoue, le gardien externe récupère la balle
@@ -225,7 +243,7 @@
             }
         }
 
-        document.getElementById('resultatFootball').innerHTML = message;
+        document.getElementById('commentary').innerHTML = message;
 
         if (action === 'tirer' && resultatDe > seuilReussite) {
             if (playerCurrent === 'internal') {
