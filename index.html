@@ -59,6 +59,8 @@
     var totalActions = 0;
     var message;
 
+    var playerScoredLast = 'internal';
+
     function initialiserJeu() {
         document.getElementById('balle').style.left = '50%';
         document.getElementById('balle').style.top = '50%';
@@ -72,6 +74,12 @@
             document.getElementById('balle').dataset.player = 'internalMidfielder';
         } else {
             document.getElementById('balle').dataset.player = 'externalMidfielder';
+        }
+
+        if (playerScoredLast === 'internal') {
+            document.getElementById('balle').dataset.player = 'externalMidfielder';
+        } else {
+            document.getElementById('balle').dataset.player = 'internalMidfielder';
         }
         document.getElementById('commentary').innerHTML = message;
 
@@ -229,7 +237,6 @@
                 // Logique pour un tir échoué
                 message = `Dommage, le tir de ${balle.dataset.player} n'est pas assez bon. <br> Le dé montre un ${resultatDe}.`;
 
-
                 if (playerCurrent === 'internal') {
                     // Si l'équipe interne échoue, le gardien externe récupère la balle
                     balle.dataset.player = 'externalGoalkeeper';
@@ -237,7 +244,6 @@
                     // Si l'équipe externe échoue, le gardien interne récupère la balle
                     balle.dataset.player = 'internalGoalkeeper';
                 }
-
                 // Mettre à jour la position de la balle
                 updateBallPosition(balle.dataset.player);
             }
@@ -248,14 +254,17 @@
         if (action === 'tirer' && resultatDe > seuilReussite) {
             if (playerCurrent === 'internal') {
                 scoreInternal++;
+                playerScoredLast = 'internal';
             } else {
                 scoreExternal++;
+                playerScoredLast = 'external';
             }
             updateScore();
             setTimeout(function() {
                 initialiserJeu(); // Réinitialiser le jeu
             }, 2000);
         }
+
     }
 
 
