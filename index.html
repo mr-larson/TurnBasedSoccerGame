@@ -13,6 +13,9 @@
             <div>Score Internal: <span id="scoreInternal">0</span></div>
             <div>Score External: <span id="scoreExternal">0</span></div>
         </div>
+        <div id="tourCounter" class="tourCounter">
+            Tours : <span id="currentTour">00</span>/20
+        </div>
         <h2>Jeu de Football au Tour par Tour</h2>
         <div id="actionsFootball" class="info">
             <!--<button onclick="effectuerActionFootball('dribbler')">Dribbler</button>-->
@@ -51,6 +54,7 @@
 </div>
 
 <script>
+    var totalActions = 0;
 
     function initialiserJeu() {
         document.getElementById('balle').style.left = '50%';
@@ -97,10 +101,9 @@
             element.classList.add('score-changed');
             setTimeout(function() {
                 element.classList.remove('score-changed');
-            }, 5000); // Durée de l'animation
+            }, 6000); // Durée de l'animation
         });
     }
-
 
     function effectuerActionFootball(action) {
         var resultatDe = lancerDeFootball();
@@ -109,6 +112,23 @@
         var ordreInternal = ['internalGoalkeeper', 'internalDefender', 'internalMidfielder', 'internalForward'];
         var ordreExternal = ['externalGoalkeeper', 'externalDefender', 'externalMidfielder', 'externalForward'];
         var message;
+
+        totalActions++;
+        document.getElementById('currentTour').textContent = totalActions.toString().padStart(2, '0');
+
+
+        // Vérifiez si le nombre total d'actions a atteint 20
+        if (totalActions >= 20) {
+            // Vérifiez si le score est égal
+            if (scoreInternal === scoreExternal) {
+                message = 'Match nul! + score interne: ' + scoreInternal + ', score externe: ' + scoreExternal;
+            } else {
+                message = 'Le match est terminé! ' + (scoreInternal > scoreExternal ? 'L\'équipe interne a gagné!' : 'L\'équipe externe a gagné!') + ' Score interne: ' + scoreInternal + ', score externe: ' + scoreExternal;
+            }
+            document.getElementById('resultatFootball').innerHTML = message;
+            alert(message)
+            return; // Arrêtez la fonction ici si le match est terminé
+        }
 
         if (action === 'passer') {
             if (resultatDe > 5) { // Passe réussie
@@ -224,6 +244,8 @@
     window.onload = function() {
         initialiserJeu();
         updateScore();
+        document.getElementById('currentTour').textContent = totalActions.toString().padStart(2, '0');
+
     };
 
 </script>
