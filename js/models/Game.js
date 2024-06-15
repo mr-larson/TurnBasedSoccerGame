@@ -28,7 +28,17 @@ export class Game {
     }
 
     rollDice() {
-        return Math.floor(Math.random() * 10) + 1;
+        const diceValue = Math.floor(Math.random() * 10) + 1;
+        this.animateDice(diceValue);
+        return diceValue;
+    }
+
+    animateDice(value) {
+        const diceElement = document.getElementById('dice');
+        diceElement.textContent = value;
+        diceElement.style.animation = 'none';
+        diceElement.offsetHeight; // Trigger reflow
+        diceElement.style.animation = 'rollDice 1s ease-out';
     }
 
     updateScore() {
