@@ -13,7 +13,7 @@
     align-items: center;
 }
 
-.commentary {
+.header .commentary {
     width: 27vw;
     height: 10vh;
     background-color: rgb(213, 213, 213);
@@ -75,7 +75,7 @@
 
 .field {
     width: 80vw;
-    height: 80vh;
+    height: 75vh;
     background-color: rgba(45, 150, 45, 0.88);
     border: 2px solid rgba(171, 171, 171, 0.82);
     border-radius: 10px;
@@ -155,34 +155,3 @@
     75% { transform: rotate(270deg); }
     100% { transform: rotate(360deg); }
 }
-
-/* Positionnement des joueurs */
-#internalGoalkeeper { left: 5vw; top: 50%; }
-
-#internalDefender1 { left: 15vw; top: 25%; }
-#internalDefender2 { left: 15vw; top: 50%; }
-#internalDefender3 { left: 15vw; top: 75%; }
-
-#internalMidfielder1 { left: 35vw; top: 20%; }
-#internalMidfielder2 { left: 35vw; top: 40%; }
-#internalMidfielder3 { left: 35vw; top: 60%; }
-#internalMidfielder4 { left: 35vw; top: 80%; }
-
-#internalForward1 { left: 55vw; top: 20%; }
-#internalForward2 { left: 55vw; top: 50%; }
-#internalForward3 { left: 55vw; top: 80%; }
-
-#externalGoalkeeper { right: 5vw; top: 50%; }
-
-#externalDefender1 { right: 15vw; top: 25%; }
-#externalDefender2 { right: 15vw; top: 50%; }
-#externalDefender3 { right: 15vw; top: 75%; }
-
-#externalMidfielder1 { right: 35vw; top: 20%; }
-#externalMidfielder2 { right: 35vw; top: 40%; }
-#externalMidfielder3 { right: 35vw; top: 60%; }
-#externalMidfielder4 { right: 35vw; top: 80%; }
-
-#externalForward1 { right: 55vw; top: 20%; }
-#externalForward2 { right: 55vw; top: 50%; }
-#externalForward3 { right: 55vw; top: 80%; }
