@@ -1,10 +1,16 @@
-class Game {
+import { Ball } from './Ball.js';
+import { Team } from './Team.js';
+import { internalOrder, externalOrder } from './constants.js';
+
+export class Game {
     constructor() {
         this.totalActions = 0;
         this.scoreInternal = 0;
         this.scoreExternal = 0;
         this.playerScoredLast = 'internal';
         this.zones = this.createZones();
+        this.internalTeam = new Team('internal', internalOrder);
+        this.externalTeam = new Team('external', externalOrder);
         this.ball = new Ball('internalMidfielder1');
         this.initGame();
 
@@ -60,6 +66,8 @@ class Game {
     }
 
     initGame() {
+        this.internalTeam.setPositions();
+        this.externalTeam.setPositions();
         this.ball.setPosition(50, 50);
         let message;
         if (this.totalActions === 0) {
@@ -197,17 +205,6 @@ class Game {
     }
 
     getNearestOpponentPlayer(playerCurrent, indexplayer, zone) {
-        const internalOrder = [
-            'internalGoalkeeper', 'internalDefender1', 'internalDefender2', 'internalDefender3',
-            'internalMidfielder1', 'internalMidfielder2', 'internalMidfielder3', 'internalMidfielder4',
-            'internalForward1', 'internalForward2', 'internalForward3'
-        ];
-        const externalOrder = [
-            'externalGoalkeeper', 'externalDefender1', 'externalDefender2', 'externalDefender3',
-            'externalMidfielder1', 'externalMidfielder2', 'externalMidfielder3', 'externalMidfielder4',
-            'externalForward1', 'externalForward2', 'externalForward3'
-        ];
-
         if (playerCurrent === 'internal') {
             switch (zone) {
                 case 'goalkeeperZone':
@@ -237,73 +234,3 @@ class Game {
         return players[Math.floor(Math.random() * players.length)];
     }
 }
-
-class Ball {
-    constructor(player) {
-        this.player = player;
-    }
-
-    setPosition(left, top) {
-        const ballElement = document.getElementById('ball');
-        ballElement.style.left = `${left}%`;
-        ballElement.style.top = `${top}%`;
-    }
-
-    setPlayer(player) {
-        this.player = player;
-        document.getElementById('ball').dataset.player = player;
-    }
-
-    updatePosition(player) {
-        const ballElement = document.getElementById('ball');
-        const playerElement = document.getElementById(player);
-        const fieldRect = document.getElementById('field').getBoundingClientRect();
-        const playerRect = playerElement.getBoundingClientRect();
-        ballElement.style.left = `${(playerRect.left - fieldRect.left + playerElement.offsetWidth / 2) * 100 / fieldRect.width}%`;
-        ballElement.style.top = `${(playerRect.top - fieldRect.top + playerElement.offsetHeight / 2) * 100 / fieldRect.height}%`;
-    }
-
-    getCurrentPlayer() {
-        const internalOrder = [
-            'internalGoalkeeper', 'internalDefender1', 'internalDefender2', 'internalDefender3',
-            'internalMidfielder1', 'internalMidfielder2', 'internalMidfielder3', 'internalMidfielder4',
-            'internalForward1', 'internalForward2', 'internalForward3'
-        ];
-        const externalOrder = [
-            'externalGoalkeeper', 'externalDefender1', 'externalDefender2', 'externalDefender3',
-            'externalMidfielder1', 'externalMidfielder2', 'externalMidfielder3', 'externalMidfielder4',
-            'externalForward1', 'externalForward2', 'externalForward3'
-        ];
-        const playerCurrent = internalOrder.includes(this.player) ? 'internal' : 'external';
-        const indexplayer = (playerCurrent === 'internal' ? internalOrder : externalOrder).indexOf(this.player);
-        const zone = this.getPlayerZone(this.player);
-        const playerNumber = document.getElementById(this.player).textContent;
-        return { playerCurrent, indexplayer, zone, playerNumber };
-    }
-
-    getPlayerZone(player) {
-        if (['internalGoalkeeper', 'externalGoalkeeper'].includes(player)) return 'goalkeeperZone';
-        if (['internalDefender1', 'internalDefender2', 'internalDefender3', 'externalDefender1', 'externalDefender2', 'externalDefender3'].includes(player)) return 'defenseZone';
-        if (['internalMidfielder1', 'internalMidfielder2', 'internalMidfielder3', 'internalMidfielder4', 'externalMidfielder1', 'externalMidfielder2', 'externalMidfielder3', 'externalMidfielder4'].includes(player)) return 'midfieldZone';
-        if (['internalForward1', 'internalForward2', 'internalForward3', 'externalForward1', 'externalForward2', 'externalForward3'].includes(player)) return 'attackZone';
-    }
-}
-
-const internalOrder = [
-    'internalGoalkeeper', 'internalDefender1', 'internalDefender2', 'internalDefender3',
-    'internalMidfielder1', 'internalMidfielder2', 'internalMidfielder3', 'internalMidfielder4',
-    'internalForward1', 'internalForward2', 'internalForward3'
-];
-const externalOrder = [
-    'externalGoalkeeper', 'externalDefender1', 'externalDefender2', 'externalDefender3',
-    'externalMidfielder1', 'externalMidfielder2', 'externalMidfielder3', 'externalMidfielder4',
-    'externalForward1', 'externalForward2', 'externalForward3'
-];
-const opponentOrder = {
-    internal: externalOrder,
-    external: internalOrder
-};
-
-window.onload = () => {
-    window.game = new Game();
-};
