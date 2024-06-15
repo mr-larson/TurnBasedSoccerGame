@@ -37,6 +37,28 @@ class Game {
         });
     }
 
+    updateActionButtonColors() {
+        const currentTeam = this.ball.getCurrentPlayer().playerCurrent;
+        const buttons = document.querySelectorAll('#passButton, #shootButton');
+        buttons.forEach(button => {
+            if (currentTeam === 'internal') {
+                button.style.backgroundColor = 'blue';
+            } else {
+                button.style.backgroundColor = 'red';
+            }
+        });
+    }
+
+    animateActionButtons() {
+        const buttons = document.querySelectorAll('#passButton, #shootButton');
+        buttons.forEach(button => {
+            button.classList.add('score-changed');
+            setTimeout(() => {
+                button.classList.remove('score-changed');
+            }, 1500); // Duration of the animation
+        });
+    }
+
     initGame() {
         this.ball.setPosition(50, 50);
         let message;
@@ -50,6 +72,7 @@ class Game {
         document.getElementById('commentary').innerHTML = message;
         this.updateScore();
         document.getElementById('currentTour').textContent = this.totalActions.toString().padStart(2, '0');
+        this.updateActionButtonColors();  // Update button colors at the start of the game
     }
 
     actionFootball(actionType) {
@@ -75,6 +98,7 @@ class Game {
         } else if (actionType === 'shoot') {
             this.handleShoot(dice);
         }
+        this.updateActionButtonColors(); // Update button colors after each action
     }
 
     handlePass(dice) {
@@ -168,6 +192,7 @@ class Game {
             this.playerScoredLast = 'external';
         }
         this.updateScore();
+        this.animateActionButtons(); // Animate action buttons when a goal is scored
         setTimeout(() => this.initGame(), 2000);
     }
 
