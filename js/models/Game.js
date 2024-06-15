@@ -122,6 +122,7 @@ export class Game {
     handlePass(dice) {
         const { playerCurrent, indexplayer, zone, playerNumber } = this.ball.getCurrentPlayer();
         let message;
+        const teamName = playerCurrent === 'internal' ? 'interne' : 'externe';
 
         if (dice > 5) { // Passe réussie
             let newPlayer;
@@ -130,13 +131,14 @@ export class Game {
             } else {
                 newPlayer = this.getRandomTeammate(zone, externalOrder);
             }
-            message = `Quelle belle passe de ${playerNumber}! <br> Le dé montre un ${dice}.`;
+            message = `Numéro ${playerNumber} de l'équipe ${teamName} réussit la passe!`;
             this.ball.setPlayer(newPlayer);
             this.ball.updatePosition(newPlayer);
         } else { // Passe échouée
             let newPlayer = this.getNearestOpponentPlayer(playerCurrent, indexplayer, zone);
             const newPlayerNumber = document.getElementById(newPlayer).textContent;
-            message = `Oh non, la passe de ${playerNumber} échoue! <br> Le dé montre un ${dice}. ${newPlayerNumber} récupère la balle.`;
+            const newTeamName = playerCurrent === 'internal' ? 'externe' : 'interne';
+            message = `Numéro ${playerNumber} de l'équipe ${teamName} échoue la passe! Numéro ${newPlayerNumber} de l'équipe ${newTeamName} récupère la balle.`;
             this.ball.setPlayer(newPlayer);
             this.ball.updatePosition(newPlayer);
         }
@@ -159,15 +161,19 @@ export class Game {
 
     handleShoot(dice) {
         const { playerCurrent, playerNumber } = this.ball.getCurrentPlayer();
+        const teamName = playerCurrent === 'internal' ? 'interne' : 'externe';
         const success = this.getShootSuccess(this.ball.player);
         let message;
 
         if (dice > success) {
-            message = `Incroyable tir de ${playerNumber}! <br> Le dé montre un ${dice}.`;
+            message = `Numéro ${playerNumber} de l'équipe ${teamName} réussit le tir!`;
             this.animateBallToGoal(playerCurrent);
         } else {
-            message = `Dommage, le tir de ${playerNumber} n'est pas assez bon. <br> Le dé montre un ${dice}.`;
-            this.ball.setPlayer(playerCurrent === 'internal' ? 'externalGoalkeeper' : 'internalGoalkeeper');
+            let newPlayer = this.ball.player.includes('internal') ? 'externalGoalkeeper' : 'internalGoalkeeper';
+            const newPlayerNumber = document.getElementById(newPlayer).textContent;
+            const newTeamName = playerCurrent === 'internal' ? 'externe' : 'interne';
+            message = `Numéro ${playerNumber} de l'équipe ${teamName} échoue le tir! Numéro ${newPlayerNumber} de l'équipe ${newTeamName} récupère la balle.`;
+            this.ball.setPlayer(newPlayer);
             this.ball.updatePosition(this.ball.player);
         }
 
