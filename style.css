@@ -1,3 +1,20 @@
+:root {
+    --primary-color: #0d78dc;
+    --hover-color: #083f8f;
+    --header-bg: rgb(213, 213, 213);
+    --header-border: #c9c9c9;
+    --header-text: #1d2944;
+    --score-bg: #333333;
+    --score-text: #ffffff;
+    --ball-color: rgba(245, 223, 95, 0.94);
+    --internal-team-color: rgba(0, 0, 255, 0.51);
+    --external-team-color: rgba(255, 0, 0, 0.51);
+    --goal-bg: rgba(0, 0, 0, 0.51);
+    --field-bg: rgba(45, 150, 45, 0.88);
+    --field-border: rgba(171, 171, 171, 0.82);
+}
+
+/* Styles généraux */
 .content {
     height: 95vh;
     display: flex;
@@ -18,14 +35,14 @@
 .header .commentary {
     width: 27vw;
     height: 10vh;
-    background-color: rgb(213, 213, 213);
-    border: 2px solid #c9c9c9;
+    background-color: var(--header-bg);
+    border: 2px solid var(--header-border);
     border-radius: 15px;
     display: flex;
     justify-content: center;
     align-items: center;
     font-size: 18px;
-    color: #1d2944;
+    color: var(--header-text);
     text-align: center;
 }
 
@@ -38,7 +55,7 @@
 }
 
 .header .actions button {
-    background-color: #0d78dc;
+    background-color: var(--primary-color);
     color: white;
     padding: 10px 15px;
     border: none;
@@ -47,7 +64,7 @@
 }
 
 .header .actions button:hover {
-    background-color: #083f8f;
+    background-color: var(--hover-color);
 }
 
 .header .scoreBoard {
@@ -56,10 +73,10 @@
     display: flex;
     justify-content: space-around;
     align-items: center;
-    background: #333333;
+    background: var(--score-bg);
     font-size: 18px;
-    color: #ffffff;
-    border: 2px solid #c9c9c9;
+    color: var(--score-text);
+    border: 2px solid var(--header-border);
     border-radius: 15px;
 }
 
@@ -79,8 +96,8 @@
 .field {
     width: 80vw;
     height: 70vh;
-    background-color: rgba(45, 150, 45, 0.88);
-    border: 2px solid rgba(171, 171, 171, 0.82);
+    background-color: var(--field-bg);
+    border: 2px solid var(--field-border);
     border-radius: 10px;
     position: relative;
 }
@@ -88,7 +105,7 @@
 .field .goal {
     width: 1vw;
     height: 20vh;
-    background-color: rgba(0, 0, 0, 0.51);
+    background-color: var(--goal-bg);
     position: absolute;
     transform: translateY(-50%);
 }
@@ -107,7 +124,7 @@
     width: 20px;
     height: 20px;
     border-radius: 50%;
-    background-color: rgba(245, 223, 95, 0.94);
+    background-color: var(--ball-color);
     position: absolute;
     transition: left 0.5s, top 0.5s;
 }
@@ -125,12 +142,12 @@
 
 .field .internalTeam .player {
     border: 2px solid blue;
-    background-color: rgba(0, 0, 255, 0.51);
+    background-color: var(--internal-team-color);
 }
 
 .field .externalTeam .player {
     border: 2px solid red;
-    background-color: rgba(255, 0, 0, 0.51);
+    background-color: var(--external-team-color);
 }
 
 /* Styles pour le dé */
@@ -141,13 +158,13 @@
     width: 50px;
     height: 50px;
     background-color: black;
-    border: 2px solid #c7c7c7;
+    border: 2px solid var(--header-border);
     border-radius: 10px;
     display: flex;
     justify-content: center;
     align-items: center;
     font-size: 24px;
-    color: #c7c7c7;
+    color: var(--header-border);
     animation: rollDice 1s ease-out;
 }
 

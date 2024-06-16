@@ -6,7 +6,6 @@ Ce projet est une simulation de match de football au tour par tour. Le jeu perme
 
 - **Passer** : Passez la balle à un coéquipier.
 - **Tirer** : Tentez de marquer un but.
-- **Dribbler** : Dribblez pour avancer dans le terrain.
 - **Commentaire en direct** : Affiche un commentaire en temps réel des actions du jeu.
 - **Animation de dé** : Affiche une animation de dé pour chaque action.
 - **Score et Tours** : Suivi du score et du nombre de tours.
