@@ -1,6 +1,6 @@
 import { Ball } from './Ball.js';
 import { Team } from './Team.js';
-import { internalOrder, externalOrder } from './constants.js';
+import { internalOrder, externalOrder } from '../constants.js';
 
 export class Game {
     constructor() {
