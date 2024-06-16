@@ -12,17 +12,25 @@ Ce projet est une simulation de match de football au tour par tour. Le jeu perme
 
 ## Structure des fichiers
 
-├── index.html <br/>
-├── style.css <br/>
-├── js <br/>
-│ ├── main.js <br/>
-│ ├── constants.js  <br/>
-│ ├── models <br/>
-│ │ ├── Ball.js <br/>
-│ │ ├── Game.js <br/>
-│ │ ├── Player.js <br/>
-│ │ ├── Team.js <br/>
-└── README.md <br/>
+TurnBasedSoccerGame/ <br>
+├── index.html <br>
+├── style.css <br>
+├── js/ <br>
+│   ├── main.js <br>
+│   ├── constants.js <br>
+│   ├── actions/ <br>
+│   │   ├── Pass.js <br>
+│   │   ├── Shoot.js <br>
+│   │   ├── updateScore.js <br>
+│   │   ├── animateDice.js <br>
+│   │   ├── animateActionButtons.js <br>
+│   │   ├── updateActionButtonColors.js <br>
+│   ├── models/ <br>
+│   │   ├── Ball.js <br>
+│   │   ├── Game.js <br>
+│   │   ├── Player.js <br>
+│   │   ├── Team.js <br>
+└── README.md
 
 
 ## Fichiers et Rôles
