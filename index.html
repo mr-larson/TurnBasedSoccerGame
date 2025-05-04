@@ -3,66 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jeu de Football au Tour par Tour</title>
+    <title>Turn-Based Football Game</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <div class="content">
-    <h2>Jeu de Football au Tour par Tour</h2>
+    <h2>Turn-Based Football Game</h2>
     <div class="header">
-        <div id="commentary" class="commentary"></div>
+        <!-- Commentary area for dynamic updates -->
+        <div id="commentary" class="commentary" aria-live="polite"></div>
         <div id="actions" class="actions">
-            <button id="passButton">Passer</button>
-            <button id="shootButton">Tirer</button>
+            <button id="passButton" aria-label="Make a pass">Pass</button>
+            <button id="dribbleButton" aria-label="Attempt a dribble">Dribble</button>
+            <button id="shootButton" aria-label="Shoot towards the goal">Shoot</button>
         </div>
         <div id="scoreBoard" class="scoreBoard">
-            <div>Interne: <span id="scoreInternal">0</span></div>
-            <div>Externe: <span id="scoreExternal">0</span></div>
-            <div id="tourCounter" class="tourCounter">
-                Tours : <span id="currentTour">00</span>/30
+            <div>Internal: <span id="scoreInternal" aria-label="Internal team score">0</span></div>
+            <div>External: <span id="scoreExternal" aria-label="External team score">0</span></div>
+            <div id="tourCounter" class="tourCounter" aria-label="Current turn and total turns">
+                Turns: <span id="currentTour" aria-label="Current turn number">00</span>/30
             </div>
         </div>
     </div>
     <div class="field" id="field">
-        <div class="goal" id="goal1"></div>
-        <div class="goal" id="goal2"></div>
-        <div class="ball" id="ball" data-player="internalMidfielder1"></div>
-        <div class="internalTeam" id="internalTeam">
-            <!-- Gardien -->
-            <div class="player" id="internalGoalkeeper">1</div>
-            <!-- Défenseurs -->
-            <div class="player" id="internalDefender1">2</div>
-            <div class="player" id="internalDefender2">3</div>
-            <div class="player" id="internalDefender3">4</div>
-            <!-- Milieux -->
-            <div class="player" id="internalMidfielder1">5</div>
-            <div class="player" id="internalMidfielder2">6</div>
-            <div class="player" id="internalMidfielder3">7</div>
-            <div class="player" id="internalMidfielder4">8</div>
-            <!-- Attaquants -->
-            <div class="player" id="internalForward1">9</div>
-            <div class="player" id="internalForward2">10</div>
-            <div class="player" id="internalForward3">11</div>
+        <!-- Goals on each side -->
+        <div class="goal" id="goal1" aria-label="Internal goal area"></div>
+        <div class="goal" id="goal2" aria-label="External goal area"></div>
+
+        <!-- Ball on the field -->
+        <div class="ball" id="ball" data-player="internalMidfielder1" aria-label="Current position of the ball"></div>
+        
+        <!-- Internal team players -->
+        <div class="internalTeam" id="internalTeam" aria-label="Internal team">
+            <div class="player" id="internalGoalkeeper" aria-label="Internal goalkeeper">1</div>
+            <div class="player" id="internalDefender1" aria-label="Internal defender number 1">2</div>
+            <div class="player" id="internalDefender2" aria-label="Internal defender number 2">3</div>
+            <div class="player" id="internalDefender3" aria-label="Internal defender number 3">4</div>
+            <div class="player" id="internalMidfielder1" aria-label="Internal midfielder number 1">5</div>
+            <div class="player" id="internalMidfielder2" aria-label="Internal midfielder number 2">6</div>
+            <div class="player" id="internalMidfielder3" aria-label="Internal midfielder number 3">7</div>
+            <div class="player" id="internalMidfielder4" aria-label="Internal midfielder number 4">8</div>
+            <div class="player" id="internalForward1" aria-label="Internal forward number 1">9</div>
+            <div class="player" id="internalForward2" aria-label="Internal forward number 2">10</div>
+            <div class="player" id="internalForward3" aria-label="Internal forward number 3">11</div>
         </div>
-        <div class="externalTeam" id="externalTeam">
-            <!-- Gardien -->
-            <div class="player" id="externalGoalkeeper">1</div>
-            <!-- Défenseurs -->
-            <div class="player" id="externalDefender1">2</div>
-            <div class="player" id="externalDefender2">3</div>
-            <div class="player" id="externalDefender3">4</div>
-            <!-- Milieux -->
-            <div class="player" id="externalMidfielder1">5</div>
-            <div class="player" id="externalMidfielder2">6</div>
-            <div class="player" id="externalMidfielder3">7</div>
-            <div class="player" id="externalMidfielder4">8</div>
-            <!-- Attaquants -->
-            <div class="player" id="externalForward1">9</div>
-            <div class="player" id="externalForward2">10</div>
-            <div class="player" id="externalForward3">11</div>
+        
+        <!-- External team players -->
+        <div class="externalTeam" id="externalTeam" aria-label="External team">
+            <div class="player" id="externalGoalkeeper" aria-label="External goalkeeper">1</div>
+            <div class="player" id="externalDefender1" aria-label="External defender number 1">2</div>
+            <div class="player" id="externalDefender2" aria-label="External defender number 2">3</div>
+            <div class="player" id="externalDefender3" aria-label="External defender number 3">4</div>
+            <div class="player" id="externalMidfielder1" aria-label="External midfielder number 1">5</div>
+            <div class="player" id="externalMidfielder2" aria-label="External midfielder number 2">6</div>
+            <div class="player" id="externalMidfielder3" aria-label="External midfielder number 3">7</div>
+            <div class="player" id="externalMidfielder4" aria-label="External midfielder number 4">8</div>
+            <div class="player" id="externalForward1" aria-label="External forward number 1">9</div>
+            <div class="player" id="externalForward2" aria-label="External forward number 2">10</div>
+            <div class="player" id="externalForward3" aria-label="External forward number 3">11</div>
         </div>
     </div>
-    <div id="dice" class="dice">1</div>
+    <!-- Dice roll for the game -->
+    <div id="dice" class="dice" aria-live="polite" aria-label="Current dice roll">1</div>
 </div>
 <script type="module" src="js/main.js"></script>
 </body>

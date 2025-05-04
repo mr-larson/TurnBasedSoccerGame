@@ -39,6 +39,12 @@ TurnBasedSoccerGame/ <br>
 - **style.css** : Contient les styles pour le jeu, y compris les positions des joueurs et les animations.
 - **js/main.js** : Point d'entrée du JavaScript qui initialise le jeu et gère les événements de clic.
 - **js/constants.js** : Contient les constantes utilisées dans le jeu, telles que les ordres des équipes.
+- **js/actions/Pass.js** : Définit la fonction `Pass` qui gère l'action de passe.
+- **js/actions/Shoot.js** : Définit la fonction `Shoot` qui gère l'action de tir.
+- **js/actions/updateScore.js** : Définit la fonction `updateScore` qui met à jour le score du match.
+- **js/actions/animateDice.js** : Définit la fonction `animateDice` qui anime le dé pour chaque action.
+- **js/actions/animateActionButtons.js** : Définit la fonction `animateActionButtons` qui anime les boutons d'action.
+- **js/actions/updateActionButtonColors.js** : Définit la fonction `updateActionButtonColors` qui met à jour les couleurs des boutons d'action.
 - **js/models/Ball.js** : Définit la classe `Ball` qui gère la position de la balle et le joueur en possession.
 - **js/models/Game.js** : Définit la classe `Game` qui gère la logique principale du jeu, les actions et les mises à jour de l'interface utilisateur.
 - **js/models/Player.js** : Définit la classe `Player` qui gère les informations sur les joueurs.

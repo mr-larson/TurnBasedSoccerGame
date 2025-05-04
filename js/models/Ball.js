@@ -12,6 +12,11 @@ export class Ball {
     setPlayer(player) {
         this.player = player;
         document.getElementById('ball').dataset.player = player;
+
+        // Ajouter un effet visuel
+        const ballElement = document.getElementById('ball');
+        ballElement.classList.add('air');
+        setTimeout(() => ballElement.classList.remove('air'), 500);
     }
 
     updatePosition(player) {
@@ -19,9 +24,12 @@ export class Ball {
         const playerElement = document.getElementById(player);
         const fieldRect = document.getElementById('field').getBoundingClientRect();
         const playerRect = playerElement.getBoundingClientRect();
+
+        ballElement.style.transition = 'left 0.3s ease-out, top 0.3s ease-out';
         ballElement.style.left = `${(playerRect.left - fieldRect.left + playerElement.offsetWidth / 2) * 100 / fieldRect.width}%`;
         ballElement.style.top = `${(playerRect.top - fieldRect.top + playerElement.offsetHeight / 2) * 100 / fieldRect.height}%`;
     }
+
 
     getCurrentPlayer() {
         const internalOrder = [

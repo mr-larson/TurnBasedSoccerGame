@@ -27,20 +27,28 @@ export function handlePass(game, dice) {
     document.getElementById('commentary').innerHTML = message;
 }
 
-function getRandomTeammate(zone, order) {
+export function getRandomTeammate(zone, order) {
     let newPlayer;
 
     if (zone === 'goalkeeperZone' || zone === 'defenseZone') {
-        newPlayer = order.slice(4, 8)[Math.floor(Math.random() * 4)]; // Passer vers un milieu aléatoire
+        newPlayer = order.slice(4, 8)[Math.floor(Math.random() * 4)]; // Passe vers un milieu aléatoire
     } else if (zone === 'midfieldZone') {
-        newPlayer = order.slice(8, 11)[Math.floor(Math.random() * 3)]; // Passer vers un attaquant aléatoire
+        newPlayer = order.slice(8, 11)[Math.floor(Math.random() * 3)]; // Passe vers un attaquant aléatoire
     } else if (zone === 'attackZone') {
-        newPlayer = order.slice(8, 11).filter(p => zone.includes(p) && p !== document.getElementById('ball').dataset.player)[Math.floor(Math.random() * 2)]; // Passer vers un autre attaquant aléatoire
+        // Correction : choisir uniquement un autre attaquant de l'équipe
+        const availableForwards = order.slice(8, 11).filter(p => p !== document.getElementById('ball').dataset.player);
+        if (availableForwards.length > 0) {
+            newPlayer = availableForwards[Math.floor(Math.random() * availableForwards.length)];
+        } else {
+            newPlayer = document.getElementById('ball').dataset.player; // Si aucun autre attaquant, garder le même
+        }
     }
+
     return newPlayer;
 }
 
-function getNearestOpponentPlayer(game, playerCurrent, indexplayer, zone) {
+
+export function getNearestOpponentPlayer(game, playerCurrent, indexplayer, zone) {
     if (playerCurrent === 'internal') {
         switch (zone) {
             case 'goalkeeperZone':

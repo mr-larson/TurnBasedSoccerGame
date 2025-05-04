@@ -1,5 +1,5 @@
 export function animateActionButtons() {
-    const buttons = document.querySelectorAll('#passButton, #shootButton');
+    const buttons = document.querySelectorAll('#passButton, #shootButton, #dribbleButton');
     buttons.forEach(button => {
         button.classList.add('score-changed');
         setTimeout(() => {

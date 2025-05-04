@@ -1,23 +1,29 @@
+import { updateScore } from './updateScore.js'; // Import if needed
+
 export function handleShoot(game, dice) {
     const { playerCurrent, playerNumber } = game.ball.getCurrentPlayer();
     const teamName = playerCurrent === 'internal' ? 'interne' : 'externe';
     const success = getShootSuccess(game.ball.player);
+    const goalkeeper = playerCurrent === 'internal' ? 'externalGoalkeeper' : 'internalGoalkeeper';
     let message;
 
     if (dice > success) {
         message = `Numéro ${playerNumber} de l'équipe ${teamName} réussit le tir!`;
         animateBallToGoal(game, playerCurrent);
+    } else if (Math.random() < 0.4) { // 40% de chance que le gardien arrête
+        message = `Arrêt incroyable de ${document.getElementById(goalkeeper).textContent} !`;
+        game.ball.setPlayer(goalkeeper);
+        game.ball.updatePosition(goalkeeper);
     } else {
-        let newPlayer = game.ball.player.includes('internal') ? 'externalGoalkeeper' : 'internalGoalkeeper';
-        const newPlayerNumber = document.getElementById(newPlayer).textContent;
-        const newTeamName = playerCurrent === 'internal' ? 'externe' : 'interne';
-        message = `Numéro ${playerNumber} de l'équipe ${teamName} échoue le tir! Numéro ${newPlayerNumber} de l'équipe ${newTeamName} récupère la balle.`;
+        let newPlayer = playerCurrent === 'internal' ? 'externalDefender1' : 'internalDefender1';
+        message = `Le tir est repoussé et récupéré par ${document.getElementById(newPlayer).textContent} !`;
         game.ball.setPlayer(newPlayer);
-        game.ball.updatePosition(game.ball.player);
+        game.ball.updatePosition(newPlayer);
     }
 
     document.getElementById('commentary').innerHTML = message;
 }
+
 
 function getShootSuccess(player) {
     if (player.includes('Forward')) {
