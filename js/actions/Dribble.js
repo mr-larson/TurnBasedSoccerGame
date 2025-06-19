@@ -15,7 +15,8 @@ export function handleDribble(game, dice) {
 
     let message;
     if (successChance > 5) {
-        const nextZone = getNextZone(zone, playerCurrent);
+        const teamZone = mapZoneToTeamZone(zone, playerCurrent);
+        const nextZone = getNextZone(teamZone, playerCurrent);
         const availablePlayers = game.zones[nextZone].filter(p => p !== game.ball.player);
         const newPlayer = availablePlayers.length > 0 ? availablePlayers[Math.floor(Math.random() * availablePlayers.length)] : game.ball.player;
 
@@ -85,6 +86,25 @@ function getZonePosition(game, playerId, zone) {
         left: adjustLeftPosition(zone),
         top: parseFloat(playerElement.style.top) || 50
     };
+}
+
+// Map generic zone names from Ball.js to team-specific zones used in Game.js
+function mapZoneToTeamZone(zone, team) {
+    const mapping = {
+        internal: {
+            goalkeeperZone: 'zoneA_defense',
+            defenseZone: 'zoneA_defense',
+            midfieldZone: 'zoneA_midfield',
+            attackZone: 'zoneA_attack'
+        },
+        external: {
+            goalkeeperZone: 'zoneB_defense',
+            defenseZone: 'zoneB_defense',
+            midfieldZone: 'zoneB_midfield',
+            attackZone: 'zoneB_attack'
+        }
+    };
+    return mapping[team][zone] || zone;
 }
 
 // ✅ Détermine la prochaine zone du joueur après un dribble
