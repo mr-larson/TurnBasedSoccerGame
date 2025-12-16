@@ -1,71 +1,190 @@
-<!DOCTYPE html>
-<html lang="fr">
+<!doctype html>
+<html class="no-js" lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Turn-Based Football Game</title>
-    <link rel="stylesheet" href="style.css">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>BabyFoot</title>
+    <link rel="stylesheet" href="css/style.css">
+    <meta name="description" content="">
+
+    <meta property="og:title" content="">
+    <meta property="og:type" content="">
+    <meta property="og:url" content="">
+    <meta property="og:image" content="">
+    <meta property="og:image:alt" content="">
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="icon.png">
+
+    <link rel="manifest" href="site.webmanifest">
+    <meta name="theme-color" content="#fafafa">
 </head>
 <body>
-<div class="content">
-    <h2>Turn-Based Football Game</h2>
-    <div class="header">
-        <!-- Commentary area for dynamic updates -->
-        <div id="commentary" class="commentary" aria-live="polite"></div>
-        <div id="actions" class="actions">
-            <button id="passButton" aria-label="Make a pass">Pass</button>
-            <button id="dribbleButton" aria-label="Attempt a dribble">Dribble</button>
-            <button id="shootButton" aria-label="Shoot towards the goal">Shoot</button>
+<div id="game-wrapper">
+
+    <!-- TOP BAR -->
+    <div id="top-bar">
+        <!-- Score -->
+        <div id="score-strip">
+            <span class="team-name">Domicile</span>
+            <span class="score-value" id="score-internal">0</span>
+            <span>-</span>
+            <span class="score-value" id="score-external">0</span>
+            <span class="team-name">Exterieur</span>
+            <span class="timer">Tours : <span id="turns-display">00</span>/30</span>
         </div>
-        <div id="scoreBoard" class="scoreBoard">
-            <div>Internal: <span id="scoreInternal" aria-label="Internal team score">0</span></div>
-            <div>External: <span id="scoreExternal" aria-label="External team score">0</span></div>
-            <div id="tourCounter" class="tourCounter" aria-label="Current turn and total turns">
-                Turns: <span id="currentTour" aria-label="Current turn number">00</span>/30
+
+        <!-- Panneau de contrôle -->
+        <div id="control-panel">
+            <div class="control-row compact">
+                <button id="mode-one-player" class="mode-toggle">
+                    Mode 1 joueur (OFF)
+                </button>
+
+                <select id="controlled-team-select" class="team-select">
+                    <option value="internal">Domicile</option>
+                    <option value="external">Exterieur</option>
+                </select>
             </div>
         </div>
     </div>
-    <div class="field" id="field">
-        <!-- Goals on each side -->
-        <div class="goal" id="goal1" aria-label="Internal goal area"></div>
-        <div class="goal" id="goal2" aria-label="External goal area"></div>
 
-        <!-- Ball on the field -->
-        <div class="ball" id="ball" data-player="internalMidfielder1" aria-label="Current position of the ball"></div>
-        
-        <!-- Internal team players -->
-        <div class="internalTeam" id="internalTeam" aria-label="Internal team">
-            <div class="player" id="internalGoalkeeper" aria-label="Internal goalkeeper">1</div>
-            <div class="player" id="internalDefender1" aria-label="Internal defender number 1">2</div>
-            <div class="player" id="internalDefender2" aria-label="Internal defender number 2">3</div>
-            <div class="player" id="internalDefender3" aria-label="Internal defender number 3">4</div>
-            <div class="player" id="internalMidfielder1" aria-label="Internal midfielder number 1">5</div>
-            <div class="player" id="internalMidfielder2" aria-label="Internal midfielder number 2">6</div>
-            <div class="player" id="internalMidfielder3" aria-label="Internal midfielder number 3">7</div>
-            <div class="player" id="internalMidfielder4" aria-label="Internal midfielder number 4">8</div>
-            <div class="player" id="internalForward1" aria-label="Internal forward number 1">9</div>
-            <div class="player" id="internalForward2" aria-label="Internal forward number 2">10</div>
-            <div class="player" id="internalForward3" aria-label="Internal forward number 3">11</div>
+    <!-- Panneau de message caché (utilisé par le JS seulement) -->
+    <div id="message-panel" class="visually-hidden">
+        <div id="message-main"></div>
+        <div id="message-sub"></div>
+    </div>
+
+    <!-- MAIN ROW -->
+    <div id="main-row">
+        <!-- Colonne gauche : carte joueur + log -->
+        <div id="left-column">
+            <!-- Player card -->
+            <div id="player-card">
+                <div id="player-header">
+                    <div id="portrait"></div>
+                    <div id="player-info">
+                        <div id="player-name">Nom complet</div>
+                        <div id="player-role">Poste : <span id="player-role-label">Milieu</span></div>
+                        <div id="player-number">Numéro : <span id="player-number-label">10</span></div>
+                        <div id="player-team">Équipe : <span id="player-team-label">Internal</span></div>
+                    </div>
+                </div>
+                <div id="player-stats">
+                    <div>Shot : <strong>17</strong></div>
+                    <div>Pass : <strong>16</strong></div>
+                    <div>Dribble : <strong>12</strong></div>
+                    <div>Contre : <strong>10</strong></div>
+                    <div>Intercept : <strong>14</strong></div>
+                    <div>Tackle : <strong>13</strong></div>
+                </div>
+                <div id="energy-bar"><div id="energy-fill" class="e-high"></div></div>
+            </div>
+
+            <!-- Carte de log d'actions -->
+            <div id="log-card">
+                <div id="log-current">
+                    <div class="log-header-row">
+                        <div class="log-section-title">DERNIÈRE ACTION</div>
+                        <div id="duel-dice-display" class="dice-chip">
+                            <!-- rempli dynamiquement -->
+                        </div>
+                    </div>
+                    <div id="current-action-title">–</div>
+                    <div id="current-action-detail">Les duels et détails apparaîtront ici.</div>
+                </div>
+                <div id="log-history">
+                    <div class="log-section-title">Historique (8 derniers coups)</div>
+                    <ul id="history-list">
+                        <!-- rempli dynamiquement -->
+                    </ul>
+                </div>
+            </div>
         </div>
-        
-        <!-- External team players -->
-        <div class="externalTeam" id="externalTeam" aria-label="External team">
-            <div class="player" id="externalGoalkeeper" aria-label="External goalkeeper">1</div>
-            <div class="player" id="externalDefender1" aria-label="External defender number 1">2</div>
-            <div class="player" id="externalDefender2" aria-label="External defender number 2">3</div>
-            <div class="player" id="externalDefender3" aria-label="External defender number 3">4</div>
-            <div class="player" id="externalMidfielder1" aria-label="External midfielder number 1">5</div>
-            <div class="player" id="externalMidfielder2" aria-label="External midfielder number 2">6</div>
-            <div class="player" id="externalMidfielder3" aria-label="External midfielder number 3">7</div>
-            <div class="player" id="externalMidfielder4" aria-label="External midfielder number 4">8</div>
-            <div class="player" id="externalForward1" aria-label="External forward number 1">9</div>
-            <div class="player" id="externalForward2" aria-label="External forward number 2">10</div>
-            <div class="player" id="externalForward3" aria-label="External forward number 3">11</div>
+
+        <!-- Field -->
+        <div id="field-wrapper">
+            <!-- Overlay IA -->
+            <div id="ai-turn-overlay">Tour de l'IA…</div>
+
+            <div id="field">
+                <div id="border-rect" class="pitch-line"></div>
+
+                <div id="halfway-line" class="pitch-line"></div>
+                <div id="center-circle"></div>
+                <div class="penalty-box" id="penalty-left"></div>
+                <div class="penalty-box" id="penalty-right"></div>
+                <div class="goal-area" id="goal-area-left"></div>
+                <div class="goal-area" id="goal-area-right"></div>
+                <div class="spot" id="center-spot"></div>
+                <div class="spot" id="pen-spot-left"></div>
+                <div class="spot" id="pen-spot-right"></div>
+
+                <div class="goal" id="goal-left"></div>
+                <div class="goal" id="goal-right"></div>
+
+                <!-- Ball -->
+                <div id="ball"></div>
+
+                <!-- INTERNAL 3-2-3-2 -->
+                <div class="player internal goalkeeper" data-player="I1" style="left: 7%;  top: 50%;">1</div>
+
+                <!-- 3 défenseurs -->
+                <div class="player internal" data-player="I2"  style="left: 20%; top: 25%;">2</div>
+                <div class="player internal" data-player="I3"  style="left: 20%; top: 50%;">3</div>
+                <div class="player internal" data-player="I4"  style="left: 20%; top: 75%;">4</div>
+
+                <!-- 2 milieux défensifs -->
+                <div class="player internal" data-player="I5"  style="left: 35%; top: 40%;">5</div>
+                <div class="player internal" data-player="I6"  style="left: 35%; top: 60%;">6</div>
+
+                <!-- 3 milieux offensifs -->
+                <div class="player internal" data-player="I7"  style="left: 55%; top: 20%;">7</div>
+                <div class="player internal" data-player="I8"  style="left: 55%; top: 50%;">8</div>
+                <div class="player internal" data-player="I9"  style="left: 55%; top: 80%;">9</div>
+
+                <!-- 2 attaquants -->
+                <div class="player internal" data-player="I10" style="left: 75%; top: 35%;">10</div>
+                <div class="player internal" data-player="I11" style="left: 75%; top: 65%;">11</div>
+
+                <!-- EXTERNAL 3-2-3-2 -->
+                <div class="player external goalkeeper" data-player="E1" style="left: 93%; top: 50%;">1</div>
+
+                <!-- 3 défenseurs -->
+                <div class="player external" data-player="E2"  style="left: 80%; top: 25%;">2</div>
+                <div class="player external" data-player="E3"  style="left: 80%; top: 50%;">3</div>
+                <div class="player external" data-player="E4"  style="left: 80%; top: 75%;">4</div>
+
+                <!-- 2 milieux défensifs -->
+                <div class="player external" data-player="E5"  style="left: 65%; top: 40%;">5</div>
+                <div class="player external" data-player="E6"  style="left: 65%; top: 60%;">6</div>
+
+                <!-- 3 milieux offensifs -->
+                <div class="player external" data-player="E7"  style="left: 45%; top: 20%;">7</div>
+                <div class="player external" data-player="E8"  style="left: 45%; top: 50%;">8</div>
+                <div class="player external" data-player="E9"  style="left: 45%; top: 80%;">9</div>
+
+                <!-- 2 attaquants -->
+                <div class="player external" data-player="E10" style="left: 25%; top: 35%;">10</div>
+                <div class="player external" data-player="E11" style="left: 25%; top: 65%;">11</div>
+
+                <div id="turn-indicator">00</div>
+            </div>
         </div>
     </div>
-    <!-- Dice roll for the game -->
-    <div id="dice" class="dice" aria-live="polite" aria-label="Current dice roll">1</div>
+
+    <!-- SKILL BARS -->
+    <div id="bars-container">
+        <div id="action-bar">
+            <!-- Contenu remplacé dynamiquement -->
+        </div>
+
+        <div id="info-text">
+        </div>
+    </div>
 </div>
-<script type="module" src="js/main.js"></script>
+
+<script src="js/app.js"></script>
 </body>
 </html>
